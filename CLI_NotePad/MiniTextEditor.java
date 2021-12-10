@@ -22,7 +22,7 @@ class MiniTextEditor {
 	
 	while (i<= 101) {
 		
-		characters[i] = br.readline();
+		characters[i] = br.readLine();
 		if(characters[i].equals("stop")) break;
 		
 		System.out.println(characters[i]);
