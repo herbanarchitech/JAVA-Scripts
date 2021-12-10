@@ -1,4 +1,5 @@
 // Nothing more nothing less , this is a relatively small text editor that read at most 200 lines of text .
+// All this was done using Vim :)
 
 import java.io.*;
 
