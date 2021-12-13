@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.MediaServer.storage.StorageFileNotException;
+import com.example.MediaServer.FileNotFound.StorageFileNotFoundException;
 import com.example.MediaServer.StorageService.StorageService;
 
 @Controller
@@ -34,7 +34,7 @@ public class UploadController {
 	
 	@GetMapping("/")
 	public String uploadloadedFiles (Model model) throws IOException {
-		model.addAllAttribute("media", storageService.loadAll().map(path -> MvcUriComponentsBuilder. fromMethodName(UploadController. class,"serveFile", path.getFileName().toString()).build().toUri().toString()).collect(Collectors.toList()));
+		model.addAttribute("media", storageService.loadAll().map(path -> MvcUriComponentsBuilder. fromMethodName(UploadController. class,"serveFile", path.getFileName().toString()).build().toUri().toString()).collect(Collectors.toList()));
 		
 		return "uploadForm";
 	}
