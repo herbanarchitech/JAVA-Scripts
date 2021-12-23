@@ -6,8 +6,8 @@ public class StorageFileNotFoundException extends StorageException {
 		super(message);
 	}
 	
+
 	public StorageFileNotFoundException(String message, Throwable cause) {
-		
 		super(message, cause);
 	}
 }

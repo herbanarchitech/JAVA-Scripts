@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.MediaServer.exception.StorageException;
+import com.example.MediaServer.exception.StorageFileNotFoundException;
 import com.example.MediaServer.properties.StorageProperties;
 import com.example.MediaServer.service.StorageService;
 
@@ -56,5 +57,57 @@ public class FileSystemStorageService implements StorageService  {
 	}
 	
 	@Override
-	public 
+	public Stream<Path> loadAll() {
+		try {
+			return Files.walk(this.rootLocation, 1).filter(path -> !path.equals(this.rootLocation)).map(this.rootlocation::relativize);
+		}
+		catch (IOException e) {
+			throw new StorageException("Failed to read stored files", e);
+		}
+	}
+	
+	@Override
+	public Path load(String filename) {
+		return rootLocation.resolve(filename);
+	}
+	
+	@Override
+	public Resource loadAsResource(String filename) {
+		try {
+			Path file = load(filename);
+			Resource resource = new UrlResource(file.toUri());
+			if(resource.exists() || resource.isReadable()) {
+				return resource;
+			}
+			
+			else { 
+				throw new StorageFileNotFoundException("Could not read file" + filename);
+			}
+			
+		}
+		catch(MalformedURLException e) {
+			throw new StorageFileNotFoundException("File could not be read" + filename, e);
+		}
+		
+	}
+	@Override
+	public void deleteAll() {
+		FileSystemUtils.deleteRecursively(rootLocation.toFile());
+	}
+	
+	@Override
+	public void init() {
+		try {
+			Files.createDirectories(rootLocation);
+			
+		}
+		
+		catch(IOException e) {
+			throw StorageException("could not initialize storage", e);
+		}
+	
+	}
+	
+}
+		
 	
